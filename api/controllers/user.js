@@ -12,16 +12,26 @@ export const getUsers = (_, res) => {
 
 export const addUser = (req, res) => {
   const q =
-    "INSERT INTO usuarios(`nome`, `email`, `fone`, `data_nascimento`) VALUES(?)";
+    "INSERT INTO usuarios(`nome`, `email`, `fone`, `data_nascimento`, `cpf`, `tipo_pessoa`, `endereco`, `cep`, `municipio`, `rua`, `numero`, `bairro`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
   const values = [
     req.body.nome,
     req.body.email,
     req.body.fone,
     req.body.data_nascimento,
+    req.body.cpf,
+    req.body.tipo_pessoa,
+    req.body.endereco,
+    req.body.cep,
+    req.body.municipio,
+    req.body.rua,
+    req.body.numero,
+    req.body.bairro,
   ];
 
-  db.query(q, [values], (err) => {
+  console.log(req);
+
+  db.query(q, values, (err) => {
     if (err) return res.json(err);
 
     return res.status(200).json("Usuário criado com sucesso.");
@@ -30,13 +40,21 @@ export const addUser = (req, res) => {
 
 export const updateUser = (req, res) => {
   const q =
-    "UPDATE usuarios SET `nome` = ?, `email` = ?, `fone` = ?, `data_nascimento` = ? WHERE `id` = ?";
+    "UPDATE usuarios SET `nome` = ?, `email` = ?, `fone` = ?, `data_nascimento` = ?, `cpf` = ?, `tipo_pessoa` = ?, `endereco` = ?, `cep` = ?, `municipio` = ?, `rua` = ?, `numero` = ?, `bairro` = ? WHERE `id` = ?";
 
   const values = [
     req.body.nome,
     req.body.email,
     req.body.fone,
     req.body.data_nascimento,
+    req.body.cpf,
+    req.body.tipo_pessoa,
+    req.body.endereco,
+    req.body.cep,
+    req.body.municipio,
+    req.body.rua,
+    req.body.numero,
+    req.body.bairro,
   ];
 
   db.query(q, [...values, req.params.id], (err) => {

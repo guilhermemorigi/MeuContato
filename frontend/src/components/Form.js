@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from "react";
 
-import { FiCamera } from "react-icons/fi";
 import axios from "axios";
 import styled from "styled-components";
 import { toast } from "react-toastify";
@@ -14,9 +13,9 @@ const FormContainer = styled.form`
   box-shadow: 0px 0px 5px #ccc;
   border-radius: 5px;
 
-  width: 100%;         
-  max-width: 2000px;  
-  margin: 20px auto;   
+  width: 100%;
+  max-width: 2000px;
+  margin: 20px auto;
 `;
 
 const InputArea = styled.div`
@@ -52,39 +51,8 @@ const Button = styled.button`
   height: 42px;
 `;
 
-const PhotoUpload = styled.div`
-  grid-column: 1 / -1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 5px;
-`;
-
-const PhotoInput = styled.input`
-  display: none;
-`;
-
-const PhotoLabel = styled.label`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  width: 100px;
-  height: 100px;
-  background-color: #eee;
-  border-radius: 50%;
-  font-size: 30px;
-  color: #555;
-  transition: background-color 0.2s;
-
-  &:hover {
-    background-color: #ddd;
-  }
-`;
-
-const Form = ({ getUsers, onEdit, setOnEdit }) => {
+const Form = ({ getUsers, onEdit, setOnEdit, onBack }) => {
   const ref = useRef();
-  const fileRef = useRef();
 
   useEffect(() => {
     if (onEdit) {
@@ -106,9 +74,9 @@ const Form = ({ getUsers, onEdit, setOnEdit }) => {
       "data_nascimento",
       "cpf",
       "tipo_pessoa",
-      "descricao_endereco",
+      "endereco",
       "cep",
-      "municipio_uf",
+      "municipio",
       "rua",
       "numero",
       "bairro",
@@ -120,17 +88,13 @@ const Form = ({ getUsers, onEdit, setOnEdit }) => {
       }
     }
 
-    const formData = new FormData();
-    requiredFields.forEach((field) =>
-      formData.append(field, user[field].value)
-    );
-
-    if (fileRef.current.files[0]) {
-      formData.append("foto", fileRef.current.files[0]);
-    }
+    const formData = {};
+    requiredFields.forEach((field) => {
+      formData[field] = user[field].value;
+    });
 
     try {
-      if (onEdit) {
+      if (!onEdit) {
         const { data } = await axios.put(
           `http://localhost:8800/${onEdit.id}`,
           formData,
@@ -139,13 +103,12 @@ const Form = ({ getUsers, onEdit, setOnEdit }) => {
         toast.success(data);
       } else {
         const { data } = await axios.post("http://localhost:8800", formData, {
-          headers: { "Content-Type": "multipart/form-data" },
+          headers: { "Content-Type": "application/json" },
         });
         toast.success(data);
       }
 
       requiredFields.forEach((field) => (user[field].value = ""));
-      fileRef.current.value = null;
 
       setOnEdit(null);
       getUsers();
@@ -182,7 +145,7 @@ const Form = ({ getUsers, onEdit, setOnEdit }) => {
       </InputArea>
       <InputArea>
         <Label>Descrição do Endereço</Label>
-        <Input name="descricao_endereco" />
+        <Input name="endereco" />
       </InputArea>
       <InputArea>
         <Label>CEP</Label>
@@ -190,7 +153,7 @@ const Form = ({ getUsers, onEdit, setOnEdit }) => {
       </InputArea>
       <InputArea>
         <Label>Município/UF</Label>
-        <Input name="municipio_uf" />
+        <Input name="municipio" />
       </InputArea>
       <InputArea>
         <Label>Rua</Label>
@@ -204,22 +167,16 @@ const Form = ({ getUsers, onEdit, setOnEdit }) => {
         <Label>Bairro</Label>
         <Input name="bairro" />
       </InputArea>
-      <PhotoUpload>
-        <PhotoInput
-          type="file"
-          id="foto"
-          ref={fileRef}
-          name="foto"
-          accept="image/*"
-        />
-        <PhotoLabel htmlFor="foto">
-          <FiCamera />
-        </PhotoLabel>
-        <span>Adicionar Foto</span>
-      </PhotoUpload>
 
       <ButtonArea>
         <Button type="submit">SALVAR</Button>
+        <Button
+          type="button"
+          style={{ marginLeft: 10, backgroundColor: "#888" }}
+          onClick={onBack}
+        >
+          VOLTAR
+        </Button>
       </ButtonArea>
     </FormContainer>
   );

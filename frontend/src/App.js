@@ -24,7 +24,7 @@ const Title = styled.h2``;
 function App() {
   const [users, setUsers] = useState([]);
   const [onEdit, setOnEdit] = useState(null);
-  const [tela, setTela] = useState("grid"); // controla qual tela está ativa
+  const [filtro, setFiltro] = useState(""); // filtro de busca
 
   const getUsers = async () => {
     try {
@@ -44,24 +44,31 @@ function App() {
       <Container>
         <Title>Cadastro de pessoas</Title>
 
-        {tela === "form" ? (
+        {/* Se estiver editando ou criando, mostra o Form, senão mostra a Grid */}
+        {onEdit !== null ? (
           <Form
             onEdit={onEdit}
             setOnEdit={setOnEdit}
             getUsers={getUsers}
-            voltar={() => setTela("grid")} // botão voltar
+            onBack={() => setOnEdit(null)} // botão voltar
           />
         ) : (
           <>
-            <Grid
-              users={users}
-              setUsers={setUsers}
-              setOnEdit={(user) => {
-                setOnEdit(user);
-                setTela("form"); // abre form ao editar
-              }}
+            <input
+              type="text"
+              placeholder="Filtrar por descrição"
+              value={filtro}
+              onChange={e => setFiltro(e.target.value)}
+              style={{ width: "100%", maxWidth: 400, marginBottom: 10 }}
             />
-            <button onClick={() => setTela("form")}>Novo Usuário</button>
+            <Grid
+              users={users.filter(user =>
+                user.endereco?.toLowerCase().includes(filtro.toLowerCase())
+              )}
+              setUsers={setUsers}
+              setOnEdit={setOnEdit}
+            />
+            <button onClick={() => setOnEdit({})}>Novo Usuário</button>
           </>
         )}
       </Container>
