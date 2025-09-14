@@ -86,8 +86,31 @@ const Grid = ({ users, setOnEdit, setUsers }) => {
               <Td>{user.numero}</Td>
               <Td>{user.bairro}</Td>
               <Td>
-                <Button style={{ background: '#2c73d2', color: '#fff' }} onClick={() => setOnEdit(user)}>Editar</Button>
-                <Button style={{ background: '#d32c2c', color: '#fff' }} onClick={() => handleDelete(user.id)}>Excluir</Button>
+                <Button
+                  style={{ background: "#2c73d2", color: "#fff" }}
+                  onClick={() => setOnEdit(user)}
+                >
+                  Editar
+                </Button>
+                <Button
+                  style={{ background: "#d32c2c", color: "#fff" }}
+                  onClick={() => handleDelete(user.id)}
+                >
+                  Excluir
+                </Button>
+                <a
+                  href={`https://wa.me/${user.fone.replace(/\D/g, "")}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    marginLeft: 5,
+                    fontSize: 20,
+                    textDecoration: "none",
+                  }}
+                  title="Chamar no WhatsApp"
+                >
+                  🟢
+                </a>
               </Td>
             </tr>
           ))}

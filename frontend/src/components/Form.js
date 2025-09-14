@@ -58,7 +58,14 @@ const Form = ({ getUsers, onEdit, setOnEdit, onBack }) => {
     if (onEdit) {
       const user = ref.current;
       Object.keys(onEdit).forEach((key) => {
-        if (user[key]) user[key].value = onEdit[key];
+        let value = onEdit[key];
+        if (key === "data_nascimento" && value) {
+          const date = new Date(value);
+          if (!isNaN(date)) {
+            value = date.toISOString().slice(0, 10);
+          }
+        }
+        if (user[key]) user[key].value = value;
       });
     }
   }, [onEdit]);
@@ -94,11 +101,11 @@ const Form = ({ getUsers, onEdit, setOnEdit, onBack }) => {
     });
 
     try {
-      if (!onEdit) {
+      if (onEdit && onEdit.id) {
         const { data } = await axios.put(
           `http://localhost:8800/${onEdit.id}`,
           formData,
-          { headers: { "Content-Type": "multipart/form-data" } }
+          { headers: { "Content-Type": "application/json" } }
         );
         toast.success(data);
       } else {
@@ -109,7 +116,6 @@ const Form = ({ getUsers, onEdit, setOnEdit, onBack }) => {
       }
 
       requiredFields.forEach((field) => (user[field].value = ""));
-
       setOnEdit(null);
       getUsers();
     } catch (err) {

@@ -63,7 +63,7 @@ function App() {
             />
             <Grid
               users={users.filter(user =>
-                user.endereco?.toLowerCase().includes(filtro.toLowerCase())
+                user.nome?.toLowerCase().includes(filtro.toLowerCase())
               )}
               setUsers={setUsers}
               setOnEdit={setOnEdit}
