@@ -1,26 +1,23 @@
 import { createGlobalStyle } from "styled-components";
 
 const Global = createGlobalStyle`
-  /* ✅ Pode ajustar/resetar do jeito que quiser */
   * {
     margin: 0;
     padding: 0;
-    box-sizing: border-box; /* recomendo manter */
-    font-family: 'Poppins', sans-serif; /* pode trocar a fonte */
+    box-sizing: border-box; 
+    font-family: 'Poppins', sans-serif; 
   }
 
-  /* ⚠️ PODE mexer em cores, layout geral do body */
   body {
     width: 100vw;
     height: 100vh;
-    display: flex; /* deixa a página centralizada */
+    display: flex; 
     justify-content: center;
-    align-items: flex-start; /* se quiser centralizar tudo, use center */
-    background-color: #f2f2f2; /* cor de fundo global */
-    color: #2f3640; /* cor padrão do texto */
+    align-items: flex-start; 
+    background-color: #f2f2f2; 
+    color: #2f3640;
   }
 
-  /* ✅ exemplo extra — estilizar botões globais */
   button {
     background-color: #0097e6;
     color: white;
@@ -37,7 +34,6 @@ const Global = createGlobalStyle`
     }
   }
 
-  /* ✅ exemplo extra — estilizar inputs globais */
   input {
     padding: 10px;
     border: 1px solid #dcdde1;

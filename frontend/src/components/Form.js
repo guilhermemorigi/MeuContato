@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import axios from "axios";
 import styled from "styled-components";
@@ -35,16 +35,15 @@ const Input = styled.input`
 const Label = styled.label``;
 
 const ButtonArea = styled.div`
-  /* ALTERAÇÃO 1: Mudar para grid */
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 30px;
-  grid-column: 1 / -1; 
+  grid-column: 1 / -1;
   margin-top: 10px;
 `;
 
 const Button = styled.button`
-  width: 100%; 
+  width: 100%;
   padding: 10px 20px;
   cursor: pointer;
   border-radius: 5px;
@@ -55,27 +54,54 @@ const Button = styled.button`
 `;
 
 const Form = ({ getUsers, onEdit, setOnEdit, onBack }) => {
-  const ref = useRef();
+  const [formData, setFormData] = useState({});
 
   useEffect(() => {
     if (onEdit) {
-      const user = ref.current;
-      Object.keys(onEdit).forEach((key) => {
-        let value = onEdit[key];
-        if (key === "data_nascimento" && value) {
-          const date = new Date(value);
-          if (!isNaN(date)) {
-            value = date.toISOString().slice(0, 10);
-          }
+      const editData = { ...onEdit };
+      if (editData.data_nascimento) {
+        const date = new Date(editData.data_nascimento);
+        if (!isNaN(date)) {
+          editData.data_nascimento = date.toISOString().slice(0, 10);
         }
-        if (user[key]) user[key].value = value;
-      });
+      }
+      setFormData(editData);
     }
   }, [onEdit]);
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleCpfChange = (e) => {
+    let value = e.target.value;
+    value = value.replace(/\D/g, "");
+    value = value.replace(/(\d{3})(\d)/, "$1.$2");
+    value = value.replace(/(\d{3})(\d)/, "$1.$2");
+    value = value.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+    // Limita o tamanho máximo
+    if (value.length > 14) {
+      value = value.slice(0, 14);
+    }
+    setFormData({ ...formData, cpf: value });
+  };
+
+  const handleCepChange = (e) => {
+    let value = e.target.value;
+    // Remove tudo que não for dígito
+    value = value.replace(/\D/g, "");
+    // Adiciona a formatação #####-###
+    value = value.replace(/^(\d{5})(\d)/, "$1-$2");
+    // Limita o tamanho máximo
+    if (value.length > 9) {
+      value = value.slice(0, 9);
+    }
+    setFormData({ ...formData, cep: value });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const user = ref.current;
 
     const requiredFields = [
       "nome",
@@ -93,15 +119,10 @@ const Form = ({ getUsers, onEdit, setOnEdit, onBack }) => {
     ];
 
     for (let field of requiredFields) {
-      if (!user[field].value) {
+      if (!formData[field]) {
         return toast.warn("Preencha todos os campos!");
       }
     }
-
-    const formData = {};
-    requiredFields.forEach((field) => {
-      formData[field] = user[field].value;
-    });
 
     try {
       if (onEdit && onEdit.id) {
@@ -118,7 +139,7 @@ const Form = ({ getUsers, onEdit, setOnEdit, onBack }) => {
         toast.success(data);
       }
 
-      requiredFields.forEach((field) => (user[field].value = ""));
+      setFormData({}); // Limpa o formulário após o sucesso
       setOnEdit(null);
       getUsers();
     } catch (err) {
@@ -127,31 +148,34 @@ const Form = ({ getUsers, onEdit, setOnEdit, onBack }) => {
   };
 
   return (
-    <FormContainer ref={ref} onSubmit={handleSubmit}>
+    <FormContainer onSubmit={handleSubmit}>
       <InputArea>
         <Label>Nome</Label>
-        <Input name="nome" />
+        <Input name="nome" maxLength="100" value={formData.nome || ""} onChange={handleChange} />
       </InputArea>
       <InputArea>
         <Label>E-mail</Label>
-        <Input name="email" type="email" />
+        <Input name="email" type="email" maxLength="100" value={formData.email || ""} onChange={handleChange} />
       </InputArea>
       <InputArea>
         <Label>Telefone</Label>
-        <Input name="fone" />
+        <Input name="fone" maxLength="15" value={formData.fone || ""} onChange={handleChange} />
       </InputArea>
       <InputArea>
         <Label>Data de Nascimento</Label>
-        <Input name="data_nascimento" type="date" />
+        <Input name="data_nascimento" type="date" value={formData.data_nascimento || ""} onChange={handleChange} />
       </InputArea>
       <InputArea>
         <Label>CPF</Label>
-        <Input name="cpf" />
+        {/* ALTERAÇÃO 3: Usar o onChange e value específicos para CPF */}
+        <Input name="cpf" value={formData.cpf || ""} onChange={handleCpfChange} />
       </InputArea>
       <InputArea>
         <Label>Tipo de Pessoa</Label>
         <select
           name="tipo_pessoa"
+          value={formData.tipo_pessoa || ""}
+          onChange={handleChange}
           style={{
             width: "100%",
             padding: "0 10px",
@@ -161,33 +185,35 @@ const Form = ({ getUsers, onEdit, setOnEdit, onBack }) => {
             boxSizing: "border-box",
           }}
         >
+          <option value="">Selecione...</option>
           <option value="Física">Física</option>
           <option value="Jurídica">Jurídica</option>
         </select>
       </InputArea>
       <InputArea>
         <Label>Descrição do Endereço</Label>
-        <Input name="endereco" />
+        <Input name="endereco" maxLength="100" value={formData.endereco || ""} onChange={handleChange} />
       </InputArea>
       <InputArea>
         <Label>CEP</Label>
-        <Input name="cep" />
+        {/* ALTERAÇÃO 4: Usar o onChange e value específicos para CEP */}
+        <Input name="cep" value={formData.cep || ""} onChange={handleCepChange} />
       </InputArea>
       <InputArea>
         <Label>Município/UF</Label>
-        <Input name="municipio" />
+        <Input name="municipio" maxLength="100" value={formData.municipio || ""} onChange={handleChange} />
       </InputArea>
       <InputArea>
         <Label>Rua</Label>
-        <Input name="rua" />
+        <Input name="rua" maxLength="100" value={formData.rua || ""} onChange={handleChange} />
       </InputArea>
       <InputArea>
         <Label>Número</Label>
-        <Input name="numero" />
+        <Input name="numero" maxLength="10" value={formData.numero || ""} onChange={handleChange} />
       </InputArea>
       <InputArea>
         <Label>Bairro</Label>
-        <Input name="bairro" />
+        <Input name="bairro" maxLength="100" value={formData.bairro || ""} onChange={handleChange} />
       </InputArea>
 
       <ButtonArea>
