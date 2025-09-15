@@ -59,7 +59,7 @@ const Grid = ({ users, setOnEdit, setUsers }) => {
             <Th>E-mail</Th>
             <Th>Telefone</Th>
             <Th>Data de Nascimento</Th>
-            <Th>CPF</Th>
+            <Th>CPF/CNPJ</Th>
             <Th>Tipo de Pessoa</Th>
             <Th>Descrição do Endereço</Th>
             <Th>CEP</Th>

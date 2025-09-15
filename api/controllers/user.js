@@ -29,8 +29,6 @@ export const addUser = (req, res) => {
     req.body.bairro,
   ];
 
-  console.log(req);
-
   db.query(q, values, (err) => {
     if (err) return res.json(err);
 

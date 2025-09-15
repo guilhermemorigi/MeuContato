@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import axios from "axios";
 import styled from "styled-components";
@@ -55,6 +55,19 @@ const Button = styled.button`
 
 const Form = ({ getUsers, onEdit, setOnEdit, onBack }) => {
   const [formData, setFormData] = useState({});
+  const [cpfCnpjLabel, setCpfCnpjLabel] = useState("CPF/CNPJ");
+  // Atualiza label e limpa campo ao trocar tipo de pessoa
+  useEffect(() => {
+    if (formData.tipo_pessoa === "Física") {
+      setCpfCnpjLabel("CPF");
+      setFormData((prev) => ({ ...prev, cpf: prev.cpf ? prev.cpf.replace(/\D/g, '').slice(0, 11) : "" }));
+    } else if (formData.tipo_pessoa === "Jurídica") {
+      setCpfCnpjLabel("CNPJ");
+      setFormData((prev) => ({ ...prev, cpf: prev.cpf ? prev.cpf.replace(/\D/g, '').slice(0, 14) : "" }));
+    } else {
+      setCpfCnpjLabel("CPF/CNPJ");
+    }
+  }, [formData.tipo_pessoa]);
 
   useEffect(() => {
     if (onEdit) {
@@ -74,15 +87,21 @@ const Form = ({ getUsers, onEdit, setOnEdit, onBack }) => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleCpfChange = (e) => {
-    let value = e.target.value;
-    value = value.replace(/\D/g, "");
-    value = value.replace(/(\d{3})(\d)/, "$1.$2");
-    value = value.replace(/(\d{3})(\d)/, "$1.$2");
-    value = value.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
-    // Limita o tamanho máximo
-    if (value.length > 14) {
-      value = value.slice(0, 14);
+  const handleCpfCnpjChange = (e) => {
+    let value = e.target.value.replace(/\D/g, "");
+    if (formData.tipo_pessoa === "Jurídica") {
+      // Formata como CNPJ: 00.000.000/0000-00
+      value = value.replace(/(\d{2})(\d)/, "$1.$2");
+      value = value.replace(/(\d{3})(\d)/, "$1.$2");
+      value = value.replace(/(\d{3})(\d)/, "$1/$2");
+      value = value.replace(/(\d{4})(\d{1,2})$/, "$1-$2");
+      if (value.length > 18) value = value.slice(0, 18);
+    } else {
+      // Formata como CPF: 000.000.000-00
+      value = value.replace(/(\d{3})(\d)/, "$1.$2");
+      value = value.replace(/(\d{3})(\d)/, "$1.$2");
+      value = value.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+      if (value.length > 14) value = value.slice(0, 14);
     }
     setFormData({ ...formData, cpf: value });
   };
@@ -108,7 +127,7 @@ const Form = ({ getUsers, onEdit, setOnEdit, onBack }) => {
       "email",
       "fone",
       "data_nascimento",
-      "cpf",
+  "cpf",
       "tipo_pessoa",
       "endereco",
       "cep",
@@ -166,9 +185,14 @@ const Form = ({ getUsers, onEdit, setOnEdit, onBack }) => {
         <Input name="data_nascimento" type="date" value={formData.data_nascimento || ""} onChange={handleChange} />
       </InputArea>
       <InputArea>
-        <Label>CPF</Label>
-        {/* ALTERAÇÃO 3: Usar o onChange e value específicos para CPF */}
-        <Input name="cpf" value={formData.cpf || ""} onChange={handleCpfChange} />
+        <Label>{cpfCnpjLabel}</Label>
+        <Input
+          name="cpf"
+          value={formData.cpf || ""}
+          onChange={handleCpfCnpjChange}
+          placeholder={cpfCnpjLabel === "CNPJ" ? "00.000.000/0000-00" : "000.000.000-00"}
+          maxLength={cpfCnpjLabel === "CNPJ" ? 18 : 14}
+        />
       </InputArea>
       <InputArea>
         <Label>Tipo de Pessoa</Label>
