@@ -35,13 +35,16 @@ const Input = styled.input`
 const Label = styled.label``;
 
 const ButtonArea = styled.div`
-  grid-column: 1 / -1;
-  display: flex;
-  justify-content: center;
+  /* ALTERAÇÃO 1: Mudar para grid */
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+  grid-column: 1 / -1; 
   margin-top: 10px;
 `;
 
 const Button = styled.button`
+  width: 100%; 
   padding: 10px 20px;
   cursor: pointer;
   border-radius: 5px;
@@ -147,7 +150,20 @@ const Form = ({ getUsers, onEdit, setOnEdit, onBack }) => {
       </InputArea>
       <InputArea>
         <Label>Tipo de Pessoa</Label>
-        <Input name="tipo_pessoa" />
+        <select
+          name="tipo_pessoa"
+          style={{
+            width: "100%",
+            padding: "0 10px",
+            border: "1px solid #bbb",
+            borderRadius: "5px",
+            height: "40px",
+            boxSizing: "border-box",
+          }}
+        >
+          <option value="Física">Física</option>
+          <option value="Jurídica">Jurídica</option>
+        </select>
       </InputArea>
       <InputArea>
         <Label>Descrição do Endereço</Label>
@@ -175,14 +191,18 @@ const Form = ({ getUsers, onEdit, setOnEdit, onBack }) => {
       </InputArea>
 
       <ButtonArea>
-        <Button type="submit">SALVAR</Button>
-        <Button
-          type="button"
-          style={{ marginLeft: 10, backgroundColor: "#888" }}
-          onClick={onBack}
-        >
-          VOLTAR
-        </Button>
+        <InputArea>
+          <Button type="submit">SALVAR</Button>
+        </InputArea>
+        <InputArea>
+          <Button
+            type="button"
+            style={{ backgroundColor: "#888" }}
+            onClick={onBack}
+          >
+            VOLTAR
+          </Button>
+        </InputArea>
       </ButtonArea>
     </FormContainer>
   );

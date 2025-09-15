@@ -56,7 +56,7 @@ function App() {
           <>
             <input
               type="text"
-              placeholder="Filtrar por descrição"
+              placeholder="Filtrar por nome"
               value={filtro}
               onChange={e => setFiltro(e.target.value)}
               style={{ width: "100%", maxWidth: 400, marginBottom: 10 }}
