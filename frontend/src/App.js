@@ -9,17 +9,48 @@ import Grid from "./components/Grid";
 import axios from "axios";
 import styled from "styled-components";
 
+const Header = styled.header`
+  width: 100vw;
+  height: 64px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(44, 62, 80, 0.07);
+  display: flex;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10;
+`;
+
+const Logo = styled.div`
+  font-size: 2rem;
+  font-weight: 700;
+  color: #0097e6;
+  margin-left: 32px;
+  letter-spacing: 1px;
+  font-family: 'Poppins', sans-serif;
+`;
+
 const Container = styled.div`
   width: 100%;
-  max-width: 800px;
-  margin-top: 20px;
+  max-width: 900px;
+  margin: 100px auto 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
+  gap: 18px;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(44, 62, 80, 0.10);
+  padding: 32px 24px 40px 24px;
 `;
 
-const Title = styled.h2``;
+const Title = styled.h2`
+  font-size: 2rem;
+  font-weight: 600;
+  color: #353b48;
+  margin-bottom: 12px;
+`;
 
 function App() {
   const [users, setUsers] = useState([]);
@@ -41,9 +72,11 @@ function App() {
 
   return (
     <>
+      <Header>
+        <Logo>MeuContato</Logo>
+      </Header>
       <Container>
         <Title>Cadastro de pessoas</Title>
-
         {/* Se estiver editando ou criando, mostra o Form, senão mostra a Grid */}
         {onEdit !== null ? (
           <Form

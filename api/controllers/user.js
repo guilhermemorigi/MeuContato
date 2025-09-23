@@ -6,7 +6,17 @@ export const getUsers = (_, res) => {
   db.query(q, (err, data) => {
     if (err) return res.json(err);
 
-    return res.status(200).json(data);
+    const dataFormatada = data.map((user) => {
+      if (user.data_nascimento) {
+        const d = new Date(user.data_nascimento);
+        const dia = String(d.getDate()).padStart(2, '0');
+        const mes = String(d.getMonth() + 1).padStart(2, '0');
+        const ano = d.getFullYear();
+        return { ...user, data_nascimento: `${dia}/${mes}/${ano}` };
+      }
+      return user;
+    });
+    return res.status(200).json(dataFormatada);
   });
 };
 
