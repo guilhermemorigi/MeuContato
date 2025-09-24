@@ -194,16 +194,15 @@ const Form = ({ getUsers, onEdit, setOnEdit, onBack }) => {
     }
 
     try {
-      const apiUrl = process.env.REACT_APP_API_URL || "/";
       if (onEdit && onEdit.id) {
         const { data } = await axios.put(
-          `${apiUrl}${onEdit.id}`,
+          `http://localhost:8800/${onEdit.id}`,
           formData,
           { headers: { "Content-Type": "application/json" } }
         );
         toast.success(data);
       } else {
-        const { data } = await axios.post(apiUrl, formData, {
+        const { data } = await axios.post("http://localhost:8800", formData, {
           headers: { "Content-Type": "application/json" },
         });
         toast.success(data);
