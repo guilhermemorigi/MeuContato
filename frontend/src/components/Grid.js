@@ -97,7 +97,7 @@ const Grid = ({ users, setOnEdit, setUsers }) => {
   const handleDelete = async (id) => {
     if (window.confirm("Deseja realmente excluir este registro?")) {
       try {
-  await axios.delete(`https://meucontato.onrender.com/${id}`);
+  await axios.delete(`http://localhost:3001/${id}`);
         setUsers((prev) => prev.filter((user) => user.id !== id));
         toast.success("Registro excluído com sucesso!");
       } catch (err) {

@@ -1,14 +1,22 @@
+import {
+  addUser,
+  deleteUser,
+  getUsers,
+  updateUser,
+} from "../controllers/user.js";
+
 import express from "express";
-import { addUser, deleteUser, getUsers, updateUser } from "../controllers/user.js";
 
-const router = express.Router()
+const port = process.env.PORT || 3001;
 
-router.get("/", getUsers)
+const router = express.Router();
 
-router.post("/", addUser)
+router.get("/", getUsers);
 
-router.put("/:id", updateUser)
+router.post("/", addUser);
 
-router.delete("/:id", deleteUser)
+router.put("/:id", updateUser);
 
-export default router
+router.delete("/:id", deleteUser);
+
+export default router;
