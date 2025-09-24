@@ -97,7 +97,8 @@ const Grid = ({ users, setOnEdit, setUsers }) => {
   const handleDelete = async (id) => {
     if (window.confirm("Deseja realmente excluir este registro?")) {
       try {
-        await axios.delete(`http://localhost:8800/${id}`);
+        const apiUrl = process.env.REACT_APP_API_URL || "/";
+        await axios.delete(`${apiUrl}${id}`);
         setUsers((prev) => prev.filter((user) => user.id !== id));
         toast.success("Registro excluído com sucesso!");
       } catch (err) {
