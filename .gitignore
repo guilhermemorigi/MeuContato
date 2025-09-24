@@ -1,0 +1,25 @@
+# Ignora dependências
+node_modules/
+api/node_modules/
+frontend/node_modules/
+
+# Ignora arquivos de log
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Ignora arquivos de sistema
+.DS_Store
+Thumbs.db
+
+# Ignora arquivos de build do React
+frontend/build/
+
+# Ignora arquivos de ambiente
+.env
+api/.env
+frontend/.env
+
+# Ignora arquivos do VSCode
+.vscode/

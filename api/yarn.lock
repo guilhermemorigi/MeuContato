@@ -147,6 +147,10 @@ cors@^2.8.5:
     object-assign "^4"
     vary "^1"
 
+"crud-fullstack@file:..":
+  version "1.0.0"
+  resolved "file:.."
+
 debug@^3.2.7:
   version "3.2.7"
   resolved "https://registry.npmjs.org/debug/-/debug-3.2.7.tgz"
