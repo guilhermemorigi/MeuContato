@@ -7,14 +7,14 @@ const app = express();
 app.use(express.json());
 app.use(cors({
   origin: [
-    "https://meucontato.onrender.com",
-    "https://meucontato-1.onrender.com/"
+    "http://localhost:3000",
+    "http://127.0.0.1:3000"
   ]
 }));
 
 app.use("/", userRoutes);
 
-const PORT = process.env.PORT || 8800;
+const PORT = process.env.PORT || 3001;
 
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
