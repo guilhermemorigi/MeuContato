@@ -31,18 +31,29 @@ const Logo = styled.div`
   font-family: 'Poppins', sans-serif;
 `;
 
+const Wrapper = styled.div`
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8faff;
+`;
+
 const Container = styled.div`
   width: 100%;
   max-width: 900px;
-  margin: 100px auto 0 auto;
+  min-height: 650px;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 18px;
   background: #fff;
   border-radius: 18px;
   box-shadow: 0 4px 24px rgba(44, 62, 80, 0.10);
   padding: 32px 24px 40px 24px;
+  font-family: 'Inter', 'Poppins', sans-serif;
 `;
 
 const Title = styled.h2`
@@ -71,7 +82,7 @@ function App() {
   }, []);
 
   return (
-    <>
+    <Wrapper>
       <Header>
         <Logo>MeuContato</Logo>
       </Header>
@@ -106,8 +117,8 @@ function App() {
         )}
       </Container>
       <ToastContainer autoClose={3000} position={toast.POSITION.BOTTOM_LEFT} />
-  {/* Estilos globais já aplicados via importação direta */}
-    </>
+      {/* Estilos globais já aplicados via importação direta */}
+    </Wrapper>
   );
 }
 
