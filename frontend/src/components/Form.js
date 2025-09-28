@@ -7,18 +7,19 @@ import { toast } from "react-toastify";
 // --- Styled Components ---
 
 const FormWrapper = styled.div`
-    /* Container para centralizar o formulário no centro da tela */
+    /* Aumentei a largura máxima para acomodar dois campos lado a lado */
     width: 100%;
-    max-width: 600px;
+    max-width: 900px; 
     margin: 0 auto;
     padding: 20px;
 `;
 
 const FormContainer = styled.form`
     display: grid;
-    /* MUDANÇA ESSENCIAL: Uma única coluna para forçar o empilhamento vertical */
-    grid-template-columns: 1fr; 
-    gap: 18px; /* Espaçamento vertical entre os FormGroups */
+    /* ESSENCIAL: Cria 2 colunas de tamanho igual (1fr 1fr) */
+    grid-template-columns: 1fr 1fr; 
+    /* Espaçamento entre as linhas e entre as colunas */
+    gap: 20px 25px; 
     background: #f8faff;
     padding: 36px 28px 28px 28px;
     box-shadow: 0 2px 16px rgba(44, 62, 80, 0.1);
@@ -28,7 +29,7 @@ const FormContainer = styled.form`
 `;
 
 const FormGroup = styled.div`
-    /* Garante que o rótulo fique acima do input */
+    /* Cada FormGroup ocupa 1 coluna, mas internamente empilha o Label acima do Input */
     display: flex;
     flex-direction: column; 
     width: 100%;
@@ -71,21 +72,21 @@ const Label = styled.label`
     font-size: 1rem;
     font-weight: 500;
     color: #0097e6;
-    /* Alinha o texto do rótulo à esquerda, acima do campo */
+    /* Alinha o rótulo à esquerda, sobre o campo */
     text-align: left; 
     padding-right: 0;
-    margin-bottom: 5px; /* Espaço entre o label e o input */
+    margin-bottom: 5px;
     align-self: auto;
 `;
 
 const ButtonArea = styled.div`
-    /* Ocupa a única coluna do grid */
+    /* Garante que a área de botões ocupe as duas colunas */
     grid-column: 1 / -1; 
     display: flex; 
-    /* Centraliza os botões horizontalmente */
+    /* ESSENCIAL: Centraliza os botões horizontalmente */
     justify-content: center; 
-    gap: 25px; 
-    margin-top: 25px;
+    gap: 30px; 
+    margin-top: 30px;
 `;
 
 const Button = styled.button`
@@ -114,7 +115,7 @@ const Button = styled.button`
     }
 `;
 
-// --- Componente Principal ---
+// --- Lógica do Componente ---
 
 const Form = ({ getUsers, onEdit, setOnEdit, onBack }) => {
     const [formData, setFormData] = useState({});
@@ -151,7 +152,7 @@ const Form = ({ getUsers, onEdit, setOnEdit, onBack }) => {
         }
     }, [onEdit]);
 
-    // Formatadores
+    // Formatadores (Mantenha seu código limpo e funcional)
     const formatPhone = (value) => {
         value = value.replace(/\D/g, "").slice(0, 11);
         if (value.length > 10) return value.replace(/(\d{2})(\d{5})(\d{4})/, "($1) $2-$3");
@@ -201,7 +202,6 @@ const Form = ({ getUsers, onEdit, setOnEdit, onBack }) => {
 
     const handleTipoPessoaChange = (e) => {
         const { value } = e.target;
-        // Limpa o CPF/CNPJ e redefine o label ao trocar o tipo de pessoa
         setFormData({ ...formData, tipo_pessoa: value, cpf: "" });
     };
 
@@ -241,34 +241,31 @@ const Form = ({ getUsers, onEdit, setOnEdit, onBack }) => {
 
     return (
         <FormWrapper>
-            {/* O título "Cadastro de Pessoas" no topo da sua página deve estar fora deste componente */}
             <FormContainer onSubmit={handleSubmit}>
                 
-                {/* 1. Nome */}
+                {/* LINHA 1: Nome e E-mail */}
                 <FormGroup>
                     <Label htmlFor="nome">Nome</Label>
                     <Input name="nome" id="nome" maxLength="100" value={formData.nome || ""} onChange={handleChange} />
                 </FormGroup>
 
-                {/* 2. E-mail */}
                 <FormGroup>
                     <Label htmlFor="email">E-mail</Label>
                     <Input name="email" id="email" type="email" maxLength="100" value={formData.email || ""} onChange={handleChange} />
                 </FormGroup>
 
-                {/* 3. Telefone */}
+                {/* LINHA 2: Telefone e Data de Nascimento */}
                 <FormGroup>
                     <Label htmlFor="fone">Telefone</Label>
                     <Input name="fone" id="fone" maxLength="15" value={formData.fone || ""} onChange={handleChange} />
                 </FormGroup>
 
-                {/* 4. Data de Nascimento */}
                 <FormGroup>
                     <Label htmlFor="data_nascimento">Data de Nascimento</Label>
                     <Input name="data_nascimento" id="data_nascimento" type="date" value={formData.data_nascimento || ""} onChange={handleChange} />
                 </FormGroup>
 
-                {/* 5. Tipo de Pessoa */}
+                {/* LINHA 3: Tipo de Pessoa e CPF/CNPJ */}
                 <FormGroup>
                     <Label htmlFor="tipo_pessoa">Tipo de Pessoa</Label>
                     <Select name="tipo_pessoa" id="tipo_pessoa" value={formData.tipo_pessoa || ""} onChange={handleTipoPessoaChange}>
@@ -278,7 +275,6 @@ const Form = ({ getUsers, onEdit, setOnEdit, onBack }) => {
                     </Select>
                 </FormGroup>
 
-                {/* 6. CPF/CNPJ (Depende do Tipo de Pessoa) */}
                 <FormGroup>
                     <Label htmlFor="cpf">{cpfCnpjLabel}</Label>
                     <Input
@@ -291,44 +287,41 @@ const Form = ({ getUsers, onEdit, setOnEdit, onBack }) => {
                         disabled={!formData.tipo_pessoa}
                     />
                 </FormGroup>
-
-                {/* 7. Descrição do Endereço */}
+                
+                {/* LINHA 4: Descrição do Endereço e CEP */}
                 <FormGroup>
                     <Label htmlFor="endereco">Descrição do Endereço</Label>
                     <Input name="endereco" id="endereco" maxLength="100" value={formData.endereco || ""} onChange={handleChange} />
                 </FormGroup>
 
-                {/* 8. CEP */}
                 <FormGroup>
                     <Label htmlFor="cep">CEP</Label>
                     <Input name="cep" id="cep" maxLength="10" value={formData.cep || ""} onChange={handleChange} />
                 </FormGroup>
 
-                {/* 9. Município/UF */}
+                {/* LINHA 5: Município/UF e Rua */}
                 <FormGroup>
                     <Label htmlFor="municipio">Município/UF</Label>
                     <Input name="municipio" id="municipio" maxLength="100" value={formData.municipio || ""} onChange={handleChange} />
                 </FormGroup>
 
-                {/* 10. Rua */}
                 <FormGroup>
                     <Label htmlFor="rua">Rua</Label>
                     <Input name="rua" id="rua" maxLength="100" value={formData.rua || ""} onChange={handleChange} />
                 </FormGroup>
 
-                {/* 11. Número */}
+                {/* LINHA 6: Número e Bairro */}
                 <FormGroup>
                     <Label htmlFor="numero">Número</Label>
                     <Input name="numero" id="numero" maxLength="10" value={formData.numero || ""} onChange={handleChange} />
                 </FormGroup>
 
-                {/* 12. Bairro */}
                 <FormGroup>
                     <Label htmlFor="bairro">Bairro</Label>
                     <Input name="bairro" id="bairro" maxLength="100" value={formData.bairro || ""} onChange={handleChange} />
                 </FormGroup>
 
-                {/* Botões Centralizados */}
+                {/* Área de Botões (Ocupa as 2 colunas e é centralizada) */}
                 <ButtonArea>
                     <Button type="submit" primary>SALVAR</Button>
                     <Button type="button" onClick={onBack}>VOLTAR</Button>
