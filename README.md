@@ -1,29 +1,100 @@
-# CRUD FullStack
+# CRUD-FullStack
 
-## Como rodar o projeto (backend + frontend juntos)
+Este projeto é um sistema CRUD completo, desenvolvido com uma arquitetura Full Stack utilizando Node.js no backend e React no frontend. O objetivo é fornecer uma base sólida para aplicações web modernas, com separação clara entre as camadas de API e interface.
 
-1. Instale todas as dependências de uma vez:
-
-```
-npm run install-all
-```
-
-2. Inicie o backend e o frontend juntos:
+## Estrutura do Repositório
 
 ```
+CRUD-FullStack/
+├── api/         # Backend Node.js (Express)
+│   ├── controllers/
+│   ├── routes/
+│   ├── db.js
+│   ├── index.js
+│   └── package.json
+├── frontend/    # Frontend React
+│   ├── public/
+│   ├── src/
+│   ├── build/
+│   └── package.json
+├── README.md
+└── package.json
+```
+
+## Pré-requisitos
+
+- Node.js (versão recomendada: 18.x ou superior)
+- npm (gerenciador de pacotes do Node)
+- Git
+
+## Instalação
+
+Clone o repositório:
+
+```powershell
+git clone https://github.com/guilhermemorigi/CRUD-FullStack.git
+cd CRUD-FullStack
+```
+
+### Backend (API)
+
+1. Acesse a pasta do backend:
+	```powershell
+	cd api
+	```
+2. Instale as dependências:
+	```powershell
+	npm install
+	```
+
+### Frontend (React)
+
+1. Acesse a pasta do frontend:
+	```powershell
+	cd ../frontend
+	```
+2. Instale as dependências:
+	```powershell
+	npm install
+	```
+
+## Execução do Projeto
+
+### Backend
+
+Na pasta `api`, execute:
+
+```powershell
 npm start
 ```
 
-- O backend (API) rodará em `localhost:3000`
-- O frontend rodará em `localhost:3000`.
+O servidor backend será iniciado (por padrão na porta 5000 ou definida no código).
 
-## Scripts disponíveis
+### Frontend
 
-- `npm run install-all`: instala dependências do backend e frontend.
-- `npm start`: sobe backend e frontend juntos.
-- `npm run server`: sobe só o backend.
-- `npm run client`: sobe só o frontend.
+Na pasta `frontend`, execute:
 
----
+```powershell
+npm start
+```
 
-Se tiver problemas, verifique se as portas não estão ocupadas e se o Node.js está instalado.
+A aplicação React será iniciada e estará disponível em `http://localhost:3000`.
+
+## Como Usar
+
+- Acesse o frontend em seu navegador: [http://localhost:3000](http://localhost:3000)
+- Realize operações de cadastro, leitura, atualização e exclusão de usuários.
+- O frontend se comunica com a API backend para persistência dos dados.
+
+## Scripts Úteis
+
+- `npm start` — Inicia o servidor de desenvolvimento (backend ou frontend)
+- `npm run build` — Gera a versão de produção do frontend
+
+## Observações
+
+- Certifique-se de que o backend esteja rodando antes de utilizar o frontend.
+- As configurações de conexão com banco de dados podem ser ajustadas em `api/db.js`.
+
+## Link do video no Youtube
+https://www.youtube.com/watch?v=5aWz2rZE3o4
