@@ -29,12 +29,7 @@ CRUD-FullStack/
 
 ## Instalação
 
-Clone o repositório:
-
-```powershell
-git clone https://github.com/guilhermemorigi/CRUD-FullStack.git
-cd CRUD-FullStack
-```
+Clone o repositório
 
 ### Backend (API)
 
@@ -98,3 +93,9 @@ A aplicação React será iniciada e estará disponível em `http://localhost:30
 
 ## Link do video no Youtube
 https://www.youtube.com/watch?v=5aWz2rZE3o4
+
+## Alunos
+Guilherme Galvani Morigi e Nathan Henrique Riffel
+
+## Link do site
+https://meucontato-1.onrender.com/
