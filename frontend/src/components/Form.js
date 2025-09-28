@@ -16,7 +16,7 @@ const FormWrapper = styled.div`
 
 const FormContainer = styled.form`
     display: grid;
-    /* ESSENCIAL: Cria 2 colunas de tamanho igual (1fr 1fr) */
+    /* CRÍTICO: Cria 2 colunas de tamanho igual (1fr 1fr) */
     grid-template-columns: 1fr 1fr; 
     /* Espaçamento entre as linhas e entre as colunas */
     gap: 20px 25px; 
@@ -26,6 +26,12 @@ const FormContainer = styled.form`
     border-radius: 16px;
     width: 100%;
     margin-bottom: 18px;
+
+    /* Design responsivo para telas pequenas (smartphones) */
+    @media (max-width: 650px) {
+        /* Mudar para uma coluna única em telas pequenas para evitar campos estreitos */
+        grid-template-columns: 1fr;
+    }
 `;
 
 const FormGroup = styled.div`
@@ -83,7 +89,7 @@ const ButtonArea = styled.div`
     /* Garante que a área de botões ocupe as duas colunas */
     grid-column: 1 / -1; 
     display: flex; 
-    /* ESSENCIAL: Centraliza os botões horizontalmente */
+    /* CRÍTICO: Centraliza os botões horizontalmente */
     justify-content: center; 
     gap: 30px; 
     margin-top: 30px;
@@ -121,7 +127,7 @@ const Form = ({ getUsers, onEdit, setOnEdit, onBack }) => {
     const [formData, setFormData] = useState({});
     const [cpfCnpjLabel, setCpfCnpjLabel] = useState("CPF/CNPJ");
 
-    // Lógica para atualizar label de CPF/CNPJ
+    // Lógica para formatar CPF/CNPJ
     useEffect(() => {
         if (formData.tipo_pessoa === "Física") {
             setCpfCnpjLabel("CPF");
@@ -132,7 +138,7 @@ const Form = ({ getUsers, onEdit, setOnEdit, onBack }) => {
         }
     }, [formData.tipo_pessoa]);
 
-    // Lógica para carregar dados de edição
+    // Lógica para carregar dados de edição e formatar a data
     useEffect(() => {
         if (onEdit) {
             const editData = { ...onEdit };
@@ -149,10 +155,13 @@ const Form = ({ getUsers, onEdit, setOnEdit, onBack }) => {
                 }
             }
             setFormData(editData);
+        } else {
+             // Limpar o formulário se onEdit for null
+            setFormData({});
         }
     }, [onEdit]);
 
-    // Formatadores (Mantenha seu código limpo e funcional)
+    // Formatadores
     const formatPhone = (value) => {
         value = value.replace(/\D/g, "").slice(0, 11);
         if (value.length > 10) return value.replace(/(\d{2})(\d{5})(\d{4})/, "($1) $2-$3");
@@ -184,11 +193,12 @@ const Form = ({ getUsers, onEdit, setOnEdit, onBack }) => {
         return value.replace(/^(\d{5})(\d)/, "$1-$2");
     };
 
-    // Handlers
+    // Handlers para input
     const handleChange = (e) => {
         const { name, value } = e.target;
         let newValue = value;
 
+        // Aplica formatação se o campo for CPF/CNPJ, Telefone ou CEP
         if (name === "fone") {
             newValue = formatPhone(value);
         } else if (name === "cep") {
@@ -197,14 +207,16 @@ const Form = ({ getUsers, onEdit, setOnEdit, onBack }) => {
             newValue = formatCpfCnpj(value, formData.tipo_pessoa);
         }
 
-        setFormData({ ...formData, [name]: newValue });
+        setFormData((prev) => ({ ...prev, [name]: newValue }));
     };
 
     const handleTipoPessoaChange = (e) => {
         const { value } = e.target;
-        setFormData({ ...formData, tipo_pessoa: value, cpf: "" });
+        // Limpa o CPF/CNPJ ao trocar o tipo de pessoa
+        setFormData((prev) => ({ ...prev, tipo_pessoa: value, cpf: "" }));
     };
 
+    // Handler de Submissão
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -214,12 +226,14 @@ const Form = ({ getUsers, onEdit, setOnEdit, onBack }) => {
         ];
 
         for (let field of requiredFields) {
+            // Verifica se o campo está vazio ou só contém espaços
             if (!formData[field] || String(formData[field]).trim() === "") {
                 return toast.warn("Preencha todos os campos!");
             }
         }
 
         try {
+            // Corrigindo a URL para corresponder ao seu back-end (Render.com)
             const url = onEdit && onEdit.id 
                 ? `https://meucontato.onrender.com/${onEdit.id}` 
                 : "https://meucontato.onrender.com";
