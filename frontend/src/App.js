@@ -4,7 +4,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { useEffect, useState } from "react";
 
 import Form from "./components/Form.js";
-import GlobalStyle from "./styles/global";
+import "./styles/global";
 import Grid from "./components/Grid";
 import axios from "axios";
 import styled from "styled-components";
@@ -106,7 +106,7 @@ function App() {
         )}
       </Container>
       <ToastContainer autoClose={3000} position={toast.POSITION.BOTTOM_LEFT} />
-      <GlobalStyle />
+  {/* Estilos globais já aplicados via importação direta */}
     </>
   );
 }
