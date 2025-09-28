@@ -225,49 +225,33 @@ const Form = ({ getUsers, onEdit, setOnEdit, onBack }) => {
 
   return (
     <FormContainer onSubmit={handleSubmit}>
-      {/* Cada campo agora ocupa duas colunas: label (direita) e input (esquerda) */}
-      <Label>Nome</Label>
-      <Input
-        name="nome"
-        maxLength="100"
-        value={formData.nome || ""}
-        onChange={handleChange}
-      />
-      <Label>E-mail</Label>
-      <Input
-        name="email"
-        type="email"
-        maxLength="100"
-        value={formData.email || ""}
-        onChange={handleChange}
-      />
-      <Label>Telefone</Label>
-      <Input
-        name="fone"
-        maxLength="15"
-        value={formData.fone || ""}
-        onChange={handleChange}
-      />
-      <Label>Data de Nascimento</Label>
-      <Input
-        name="data_nascimento"
-        type="date"
-        value={formData.data_nascimento || ""}
-        onChange={handleChange}
-      />
-      <Label>{cpfCnpjLabel}</Label>
+      {/* Cada linha do grid: label + input/select */}
+      <Label htmlFor="nome">Nome</Label>
+      <Input name="nome" id="nome" maxLength="100" value={formData.nome || ""} onChange={handleChange} />
+
+      <Label htmlFor="email">E-mail</Label>
+      <Input name="email" id="email" type="email" maxLength="100" value={formData.email || ""} onChange={handleChange} />
+
+      <Label htmlFor="fone">Telefone</Label>
+      <Input name="fone" id="fone" maxLength="15" value={formData.fone || ""} onChange={handleChange} />
+
+      <Label htmlFor="data_nascimento">Data de Nascimento</Label>
+      <Input name="data_nascimento" id="data_nascimento" type="date" value={formData.data_nascimento || ""} onChange={handleChange} />
+
+      <Label htmlFor="cpf">{cpfCnpjLabel}</Label>
       <Input
         name="cpf"
+        id="cpf"
         value={formData.cpf || ""}
         onChange={handleCpfCnpjChange}
-        placeholder={
-          cpfCnpjLabel === "CNPJ" ? "00.000.000/0000-00" : "000.000.000-00"
-        }
+        placeholder={cpfCnpjLabel === "CNPJ" ? "00.000.000/0000-00" : "000.000.000-00"}
         maxLength={cpfCnpjLabel === "CNPJ" ? 18 : 14}
       />
-      <Label>Tipo de Pessoa</Label>
+
+      <Label htmlFor="tipo_pessoa">Tipo de Pessoa</Label>
       <select
         name="tipo_pessoa"
+        id="tipo_pessoa"
         value={formData.tipo_pessoa || ""}
         onChange={handleChange}
         style={{
@@ -283,52 +267,29 @@ const Form = ({ getUsers, onEdit, setOnEdit, onBack }) => {
         <option value="Física">Física</option>
         <option value="Jurídica">Jurídica</option>
       </select>
-      <Label>Descrição do Endereço</Label>
-      <Input
-        name="endereco"
-        maxLength="100"
-        value={formData.endereco || ""}
-        onChange={handleChange}
-      />
-      <Label>CEP</Label>
-      <Input name="cep" value={formData.cep || ""} onChange={handleCepChange} />
-      <Label>Município/UF</Label>
-      <Input
-        name="municipio"
-        maxLength="100"
-        value={formData.municipio || ""}
-        onChange={handleChange}
-      />
-      <Label>Rua</Label>
-      <Input
-        name="rua"
-        maxLength="100"
-        value={formData.rua || ""}
-        onChange={handleChange}
-      />
-      <Label>Número</Label>
-      <Input
-        name="numero"
-        maxLength="10"
-        value={formData.numero || ""}
-        onChange={handleChange}
-      />
-      <Label>Bairro</Label>
-      <Input
-        name="bairro"
-        maxLength="100"
-        value={formData.bairro || ""}
-        onChange={handleChange}
-      />
+
+      <Label htmlFor="endereco">Descrição do Endereço</Label>
+      <Input name="endereco" id="endereco" maxLength="100" value={formData.endereco || ""} onChange={handleChange} />
+
+      <Label htmlFor="cep">CEP</Label>
+      <Input name="cep" id="cep" value={formData.cep || ""} onChange={handleCepChange} />
+
+      <Label htmlFor="municipio">Município/UF</Label>
+      <Input name="municipio" id="municipio" maxLength="100" value={formData.municipio || ""} onChange={handleChange} />
+
+      <Label htmlFor="rua">Rua</Label>
+      <Input name="rua" id="rua" maxLength="100" value={formData.rua || ""} onChange={handleChange} />
+
+      <Label htmlFor="numero">Número</Label>
+      <Input name="numero" id="numero" maxLength="10" value={formData.numero || ""} onChange={handleChange} />
+
+      <Label htmlFor="bairro">Bairro</Label>
+      <Input name="bairro" id="bairro" maxLength="100" value={formData.bairro || ""} onChange={handleChange} />
 
       {/* Botões ocupam as duas colunas */}
       <ButtonArea style={{ gridColumn: "1 / -1" }}>
         <Button type="submit">SALVAR</Button>
-        <Button
-          type="button"
-          style={{ backgroundColor: "#888" }}
-          onClick={onBack}
-        >
+        <Button type="button" style={{ backgroundColor: "#888" }} onClick={onBack}>
           VOLTAR
         </Button>
       </ButtonArea>
