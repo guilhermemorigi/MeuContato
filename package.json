@@ -9,7 +9,8 @@
     "install-all": "npm install --prefix api && npm install --prefix frontend"
   },
   "devDependencies": {
-    "concurrently": "^8.2.0"
+    "concurrently": "^8.2.0",
+    "react-input-mask": "^3.0.0-alpha.2"
   },
   "dependencies": {
     "pg": "^8.16.3"
