@@ -291,9 +291,6 @@ const Form = ({ getUsers, onEdit, setOnEdit, onBack }) => {
 
     return (
         <FormWrapper>
-            <h1 style={{ textAlign: 'center', color: COLORS.text, marginBottom: '20px', fontSize: '1.8rem', fontWeight: '400' }}>
-                Cadastro de Pessoas
-            </h1>
             <FormContainer onSubmit={handleSubmit}>
                 
                 {/* LINHA 1: Nome e E-mail */}
