@@ -6,21 +6,15 @@ import { toast } from "react-toastify";
 
 const FormContainer = styled.form`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 28px;
+  grid-template-columns: 180px 1fr;
+  gap: 18px 24px;
   background: #f8faff;
   padding: 36px 28px 28px 28px;
-  box-shadow: 0 2px 16px rgba(44, 62, 80, 0.10);
+  box-shadow: 0 2px 16px rgba(44, 62, 80, 0.1);
   border-radius: 16px;
   width: 100%;
-  max-width: 1200px;
+  max-width: 600px;
   margin: 0 auto 18px auto;
-`;
-
-const InputArea = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
 `;
 
 const Input = styled.input`
@@ -45,6 +39,9 @@ const Label = styled.label`
   font-size: 1rem;
   font-weight: 500;
   color: #0097e6;
+  text-align: right;
+  padding-right: 15px;
+  align-self: center;
 `;
 
 const ButtonArea = styled.div`
@@ -81,10 +78,16 @@ const Form = ({ getUsers, onEdit, setOnEdit, onBack }) => {
   useEffect(() => {
     if (formData.tipo_pessoa === "Física") {
       setCpfCnpjLabel("CPF");
-      setFormData((prev) => ({ ...prev, cpf: prev.cpf ? prev.cpf.replace(/\D/g, '').slice(0, 11) : "" }));
+      setFormData((prev) => ({
+        ...prev,
+        cpf: prev.cpf ? prev.cpf.replace(/\D/g, "").slice(0, 11) : "",
+      }));
     } else if (formData.tipo_pessoa === "Jurídica") {
       setCpfCnpjLabel("CNPJ");
-      setFormData((prev) => ({ ...prev, cpf: prev.cpf ? prev.cpf.replace(/\D/g, '').slice(0, 14) : "" }));
+      setFormData((prev) => ({
+        ...prev,
+        cpf: prev.cpf ? prev.cpf.replace(/\D/g, "").slice(0, 14) : "",
+      }));
     } else {
       setCpfCnpjLabel("CPF/CNPJ");
     }
@@ -202,9 +205,13 @@ const Form = ({ getUsers, onEdit, setOnEdit, onBack }) => {
         );
         toast.success(data);
       } else {
-  const { data } = await axios.post("https://meucontato.onrender.com", formData, {
-          headers: { "Content-Type": "application/json" },
-        });
+        const { data } = await axios.post(
+          "https://meucontato.onrender.com",
+          formData,
+          {
+            headers: { "Content-Type": "application/json" },
+          }
+        );
         toast.success(data);
       }
 
@@ -218,91 +225,112 @@ const Form = ({ getUsers, onEdit, setOnEdit, onBack }) => {
 
   return (
     <FormContainer onSubmit={handleSubmit}>
-      <InputArea>
-        <Label>Nome</Label>
-        <Input name="nome" maxLength="100" value={formData.nome || ""} onChange={handleChange} />
-      </InputArea>
-      <InputArea>
-        <Label>E-mail</Label>
-        <Input name="email" type="email" maxLength="100" value={formData.email || ""} onChange={handleChange} />
-      </InputArea>
-      <InputArea>
-        <Label>Telefone</Label>
-        <Input name="fone" maxLength="15" value={formData.fone || ""} onChange={handleChange} />
-      </InputArea>
-      <InputArea>
-        <Label>Data de Nascimento</Label>
-        <Input name="data_nascimento" type="date" value={formData.data_nascimento || ""} onChange={handleChange} />
-      </InputArea>
-      <InputArea>
-        <Label>{cpfCnpjLabel}</Label>
-        <Input
-          name="cpf"
-          value={formData.cpf || ""}
-          onChange={handleCpfCnpjChange}
-          placeholder={cpfCnpjLabel === "CNPJ" ? "00.000.000/0000-00" : "000.000.000-00"}
-          maxLength={cpfCnpjLabel === "CNPJ" ? 18 : 14}
-        />
-      </InputArea>
-      <InputArea>
-        <Label>Tipo de Pessoa</Label>
-        <select
-          name="tipo_pessoa"
-          value={formData.tipo_pessoa || ""}
-          onChange={handleChange}
-          style={{
-            width: "100%",
-            padding: "0 10px",
-            border: "1px solid #bbb",
-            borderRadius: "5px",
-            height: "40px",
-            boxSizing: "border-box",
-          }}
-        >
-          <option value="">Selecione...</option>
-          <option value="Física">Física</option>
-          <option value="Jurídica">Jurídica</option>
-        </select>
-      </InputArea>
-      <InputArea>
-        <Label>Descrição do Endereço</Label>
-        <Input name="endereco" maxLength="100" value={formData.endereco || ""} onChange={handleChange} />
-      </InputArea>
-      <InputArea>
-        <Label>CEP</Label>
-        {/* ALTERAÇÃO 4: Usar o onChange e value específicos para CEP */}
-        <Input name="cep" value={formData.cep || ""} onChange={handleCepChange} />
-      </InputArea>
-      <InputArea>
-        <Label>Município/UF</Label>
-        <Input name="municipio" maxLength="100" value={formData.municipio || ""} onChange={handleChange} />
-      </InputArea>
-      <InputArea>
-        <Label>Rua</Label>
-        <Input name="rua" maxLength="100" value={formData.rua || ""} onChange={handleChange} />
-      </InputArea>
-      <InputArea>
-        <Label>Número</Label>
-        <Input name="numero" maxLength="10" value={formData.numero || ""} onChange={handleChange} />
-      </InputArea>
-      <InputArea>
-        <Label>Bairro</Label>
-        <Input name="bairro" maxLength="100" value={formData.bairro || ""} onChange={handleChange} />
-      </InputArea>
+      {/* Cada campo agora ocupa duas colunas: label (direita) e input (esquerda) */}
+      <Label>Nome</Label>
+      <Input
+        name="nome"
+        maxLength="100"
+        value={formData.nome || ""}
+        onChange={handleChange}
+      />
+      <Label>E-mail</Label>
+      <Input
+        name="email"
+        type="email"
+        maxLength="100"
+        value={formData.email || ""}
+        onChange={handleChange}
+      />
+      <Label>Telefone</Label>
+      <Input
+        name="fone"
+        maxLength="15"
+        value={formData.fone || ""}
+        onChange={handleChange}
+      />
+      <Label>Data de Nascimento</Label>
+      <Input
+        name="data_nascimento"
+        type="date"
+        value={formData.data_nascimento || ""}
+        onChange={handleChange}
+      />
+      <Label>{cpfCnpjLabel}</Label>
+      <Input
+        name="cpf"
+        value={formData.cpf || ""}
+        onChange={handleCpfCnpjChange}
+        placeholder={
+          cpfCnpjLabel === "CNPJ" ? "00.000.000/0000-00" : "000.000.000-00"
+        }
+        maxLength={cpfCnpjLabel === "CNPJ" ? 18 : 14}
+      />
+      <Label>Tipo de Pessoa</Label>
+      <select
+        name="tipo_pessoa"
+        value={formData.tipo_pessoa || ""}
+        onChange={handleChange}
+        style={{
+          width: "100%",
+          padding: "0 10px",
+          border: "1px solid #bbb",
+          borderRadius: "5px",
+          height: "40px",
+          boxSizing: "border-box",
+        }}
+      >
+        <option value="">Selecione...</option>
+        <option value="Física">Física</option>
+        <option value="Jurídica">Jurídica</option>
+      </select>
+      <Label>Descrição do Endereço</Label>
+      <Input
+        name="endereco"
+        maxLength="100"
+        value={formData.endereco || ""}
+        onChange={handleChange}
+      />
+      <Label>CEP</Label>
+      <Input name="cep" value={formData.cep || ""} onChange={handleCepChange} />
+      <Label>Município/UF</Label>
+      <Input
+        name="municipio"
+        maxLength="100"
+        value={formData.municipio || ""}
+        onChange={handleChange}
+      />
+      <Label>Rua</Label>
+      <Input
+        name="rua"
+        maxLength="100"
+        value={formData.rua || ""}
+        onChange={handleChange}
+      />
+      <Label>Número</Label>
+      <Input
+        name="numero"
+        maxLength="10"
+        value={formData.numero || ""}
+        onChange={handleChange}
+      />
+      <Label>Bairro</Label>
+      <Input
+        name="bairro"
+        maxLength="100"
+        value={formData.bairro || ""}
+        onChange={handleChange}
+      />
 
-      <ButtonArea>
-        <InputArea>
-          <Button type="submit">SALVAR</Button>
-        </InputArea>
-        <InputArea>
-          <Button
-            type="button"
-            style={{ backgroundColor: "#888" }}
-            onClick={onBack}
-          >
-            VOLTAR
-          </Button>
-        </InputArea>
+      {/* Botões ocupam as duas colunas */}
+      <ButtonArea style={{ gridColumn: "1 / -1" }}>
+        <Button type="submit">SALVAR</Button>
+        <Button
+          type="button"
+          style={{ backgroundColor: "#888" }}
+          onClick={onBack}
+        >
+          VOLTAR
+        </Button>
       </ButtonArea>
     </FormContainer>
   );
