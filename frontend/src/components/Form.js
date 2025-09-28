@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-
+import InputMask from "react-input-mask";
 import axios from "axios";
 import styled from "styled-components";
 import { toast } from "react-toastify";
@@ -10,7 +10,7 @@ const FormContainer = styled.form`
   gap: 28px;
   background: #f8faff;
   padding: 36px 28px 28px 28px;
-  box-shadow: 0 2px 16px rgba(44, 62, 80, 0.10);
+  box-shadow: 0 2px 16px rgba(44, 62, 80, 0.1);
   border-radius: 16px;
   width: 100%;
   max-width: 1200px;
@@ -81,10 +81,16 @@ const Form = ({ getUsers, onEdit, setOnEdit, onBack }) => {
   useEffect(() => {
     if (formData.tipo_pessoa === "Física") {
       setCpfCnpjLabel("CPF");
-      setFormData((prev) => ({ ...prev, cpf: prev.cpf ? prev.cpf.replace(/\D/g, '').slice(0, 11) : "" }));
+      setFormData((prev) => ({
+        ...prev,
+        cpf: prev.cpf ? prev.cpf.replace(/\D/g, "").slice(0, 11) : "",
+      }));
     } else if (formData.tipo_pessoa === "Jurídica") {
       setCpfCnpjLabel("CNPJ");
-      setFormData((prev) => ({ ...prev, cpf: prev.cpf ? prev.cpf.replace(/\D/g, '').slice(0, 14) : "" }));
+      setFormData((prev) => ({
+        ...prev,
+        cpf: prev.cpf ? prev.cpf.replace(/\D/g, "").slice(0, 14) : "",
+      }));
     } else {
       setCpfCnpjLabel("CPF/CNPJ");
     }
@@ -202,9 +208,13 @@ const Form = ({ getUsers, onEdit, setOnEdit, onBack }) => {
         );
         toast.success(data);
       } else {
-  const { data } = await axios.post("https://meucontato.onrender.com", formData, {
-          headers: { "Content-Type": "application/json" },
-        });
+        const { data } = await axios.post(
+          "https://meucontato.onrender.com",
+          formData,
+          {
+            headers: { "Content-Type": "application/json" },
+          }
+        );
         toast.success(data);
       }
 
@@ -220,29 +230,55 @@ const Form = ({ getUsers, onEdit, setOnEdit, onBack }) => {
     <FormContainer onSubmit={handleSubmit}>
       <InputArea>
         <Label>Nome</Label>
-        <Input name="nome" maxLength="100" value={formData.nome || ""} onChange={handleChange} />
+        <Input
+          name="nome"
+          maxLength="100"
+          value={formData.nome || ""}
+          onChange={handleChange}
+        />
       </InputArea>
       <InputArea>
         <Label>E-mail</Label>
-        <Input name="email" type="email" maxLength="100" value={formData.email || ""} onChange={handleChange} />
+        <Input
+          name="email"
+          type="email"
+          maxLength="100"
+          value={formData.email || ""}
+          onChange={handleChange}
+        />
       </InputArea>
       <InputArea>
         <Label>Telefone</Label>
-        <Input name="fone" maxLength="15" value={formData.fone || ""} onChange={handleChange} />
-      </InputArea>
-      <InputArea>
-        <Label>Data de Nascimento</Label>
-        <Input name="data_nascimento" type="date" value={formData.data_nascimento || ""} onChange={handleChange} />
+        <InputMask
+          mask="(99) 99999-9999"
+          value={formData.fone || ""}
+          onChange={handleChange}
+        >
+          {(inputProps) => <Input {...inputProps} name="fone" />}
+        </InputMask>
       </InputArea>
       <InputArea>
         <Label>{cpfCnpjLabel}</Label>
-        <Input
-          name="cpf"
+        <InputMask
+          mask={
+            cpfCnpjLabel === "CNPJ" ? "99.999.999/9999-99" : "999.999.999-99"
+          }
           value={formData.cpf || ""}
           onChange={handleCpfCnpjChange}
-          placeholder={cpfCnpjLabel === "CNPJ" ? "00.000.000/0000-00" : "000.000.000-00"}
-          maxLength={cpfCnpjLabel === "CNPJ" ? 18 : 14}
-        />
+        >
+          {(inputProps) => (
+            <Input
+              {...inputProps}
+              name="cpf"
+              placeholder={
+                cpfCnpjLabel === "CNPJ"
+                  ? "00.000.000/0000-00"
+                  : "000.000.000-00"
+              }
+              maxLength={cpfCnpjLabel === "CNPJ" ? 18 : 14}
+            />
+          )}
+        </InputMask>
       </InputArea>
       <InputArea>
         <Label>Tipo de Pessoa</Label>
@@ -266,28 +302,57 @@ const Form = ({ getUsers, onEdit, setOnEdit, onBack }) => {
       </InputArea>
       <InputArea>
         <Label>Descrição do Endereço</Label>
-        <Input name="endereco" maxLength="100" value={formData.endereco || ""} onChange={handleChange} />
+        <Input
+          name="endereco"
+          maxLength="100"
+          value={formData.endereco || ""}
+          onChange={handleChange}
+        />
       </InputArea>
       <InputArea>
         <Label>CEP</Label>
         {/* ALTERAÇÃO 4: Usar o onChange e value específicos para CEP */}
-        <Input name="cep" value={formData.cep || ""} onChange={handleCepChange} />
+        <Input
+          name="cep"
+          value={formData.cep || ""}
+          onChange={handleCepChange}
+        />
       </InputArea>
       <InputArea>
         <Label>Município/UF</Label>
-        <Input name="municipio" maxLength="100" value={formData.municipio || ""} onChange={handleChange} />
+        <Input
+          name="municipio"
+          maxLength="100"
+          value={formData.municipio || ""}
+          onChange={handleChange}
+        />
       </InputArea>
       <InputArea>
         <Label>Rua</Label>
-        <Input name="rua" maxLength="100" value={formData.rua || ""} onChange={handleChange} />
+        <Input
+          name="rua"
+          maxLength="100"
+          value={formData.rua || ""}
+          onChange={handleChange}
+        />
       </InputArea>
       <InputArea>
         <Label>Número</Label>
-        <Input name="numero" maxLength="10" value={formData.numero || ""} onChange={handleChange} />
+        <Input
+          name="numero"
+          maxLength="10"
+          value={formData.numero || ""}
+          onChange={handleChange}
+        />
       </InputArea>
       <InputArea>
         <Label>Bairro</Label>
-        <Input name="bairro" maxLength="100" value={formData.bairro || ""} onChange={handleChange} />
+        <Input
+          name="bairro"
+          maxLength="100"
+          value={formData.bairro || ""}
+          onChange={handleChange}
+        />
       </InputArea>
 
       <ButtonArea>
